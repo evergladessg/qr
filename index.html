@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Redirecting…</title>
+<style>
+  body { font-family: system-ui, sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; margin:0; color:#444; }
+</style>
+</head>
+<body>
+<p id="msg">Redirecting…</p>
+<script>
+// Reads ?id=NAME and sends the visitor to the URL listed for NAME in links.json.
+(async () => {
+  const id = new URLSearchParams(location.search).get('id');
+  const msg = document.getElementById('msg');
+  try {
+    const links = await (await fetch('links.json', { cache: 'no-store' })).json();
+    const target = id && links[id];
+    if (target) { location.replace(target); return; }
+    msg.textContent = 'This link isn\'t set up yet.';
+  } catch (e) {
+    msg.textContent = 'Couldn\'t load links.json.';
+  }
+})();
+</script>
+</body>
+</html>
